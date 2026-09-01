@@ -25,51 +25,50 @@ This repository contains a robust, enterprise-ready **Customer Transaction Manag
 ## 📁 Complete Project Structure
 
 ```
-toucan/
+Thotapalli_Chaitanya_kumar_Reddy/
 ├── .gitignore                          # Git ignore rules for Java, IDEs, and build artifacts
 ├── README.md                           # Main repository documentation
-└── Transaction-assignment/             # Spring Boot Application Root
-    ├── pom.xml                         # Maven dependencies & project build configuration
-    ├── mvnw / mvnw.cmd                 # Cross-platform Maven wrappers
-    ├── README.md                       # Assignment specifications & guidelines
-    ├── STUDENT_CHECKLIST.md            # Completed assignment requirements checklist
-    └── src/
-        ├── main/
-        │   ├── java/com/example/transactionstarter/
-        │   │   ├── TransactionStarterApplication.java   # Spring Boot Main Entry Point
-        │   │   ├── controller/
-        │   │   │   └── TransactionController.java      # REST API Endpoints Handler
-        │   │   ├── dto/
-        │   │   │   ├── CreateTransactionRequest.java   # Request payload for creating a transaction
-        │   │   │   ├── UpdateTransactionStatusRequest.java # Request payload for status updates
-        │   │   │   ├── TransactionResponse.java        # Standardized API response payload
-        │   │   │   └── ErrorResponse.java              # Global error response payload format
-        │   │   ├── exception/
-        │   │   │   ├── GlobalExceptionHandler.java     # Controller Advice for global error handling
-        │   │   │   ├── DuplicateTransactionException.java  # Exception thrown on 409 Conflict
-        │   │   │   ├── InvalidStatusTransitionException.java # Exception thrown on invalid state change
-        │   │   │   └── TransactionNotFoundException.java   # Exception thrown on 404 Not Found
-        │   │   ├── model/
-        │   │   │   ├── Transaction.java                # JPA Entity mapped to H2 database table
-        │   │   │   ├── TransactionStatus.java          # State Machine Enum (PENDING, PROCESSING, etc.)
-        │   │   │   └── TransactionType.java            # Enum (PAYMENT, REFUND, TRANSFER, etc.)
-        │   │   ├── repository/
-        │   │   │   └── TransactionRepository.java      # Spring Data JPA Repository
-        │   │   └── service/
-        │   │       └── TransactionService.java         # Core Business Logic & State Machine Service
-        │   └── resources/
-        │       ├── application.yml                 # Database, server, and H2 console settings
-        │       └── static/
-        │           └── index.html                  # Interactive Browser Web Dashboard
-        └── test/
-            └── java/com/example/transactionstarter/
-                ├── TransactionStarterApplicationTests.java # Context loading test
-                ├── controller/
-                │   └── TransactionControllerTest.java    # MockMvc REST API integration tests
-                ├── model/
-                │   └── TransactionStatusTest.java        # Unit tests for state machine transitions
-                └── service/
-                    └── TransactionServiceTest.java       # Unit tests for business logic & errors
+├── ASSIGNMENT_INSTRUCTIONS.md          # Assignment specifications & guidelines
+├── STUDENT_CHECKLIST.md            # Completed assignment requirements checklist
+├── pom.xml                         # Maven dependencies & project build configuration
+├── mvnw / mvnw.cmd                 # Cross-platform Maven wrappers
+└── src/
+    ├── main/
+    │   ├── java/com/example/transactionstarter/
+    │   │   ├── TransactionStarterApplication.java   # Spring Boot Main Entry Point
+    │   │   ├── controller/
+    │   │   │   └── TransactionController.java      # REST API Endpoints Handler
+    │   │   ├── dto/
+    │   │   │   ├── CreateTransactionRequest.java   # Request payload for creating a transaction
+    │   │   │   ├── UpdateTransactionStatusRequest.java # Request payload for status updates
+    │   │   │   ├── TransactionResponse.java        # Standardized API response payload
+    │   │   │   └── ErrorResponse.java              # Global error response payload format
+    │   │   ├── exception/
+    │   │   │   ├── GlobalExceptionHandler.java     # Controller Advice for global error handling
+    │   │   │   ├── DuplicateTransactionException.java  # Exception thrown on 409 Conflict
+    │   │   │   ├── InvalidStatusTransitionException.java # Exception thrown on invalid state change
+    │   │   │   └── TransactionNotFoundException.java   # Exception thrown on 404 Not Found
+    │   │   ├── model/
+    │   │   │   ├── Transaction.java                # JPA Entity mapped to H2 database table
+    │   │   │   ├── TransactionStatus.java          # State Machine Enum (PENDING, PROCESSING, etc.)
+    │   │   │   └── TransactionType.java            # Enum (PAYMENT, REFUND, TRANSFER, etc.)
+    │   │   ├── repository/
+    │   │   │   └── TransactionRepository.java      # Spring Data JPA Repository
+    │   │   └── service/
+    │   │       └── TransactionService.java         # Core Business Logic & State Machine Service
+    │   └── resources/
+    │       ├── application.yml                 # Database, server, and H2 console settings
+    │       └── static/
+    │           └── index.html                  # Interactive Browser Web Dashboard
+    └── test/
+        └── java/com/example/transactionstarter/
+            ├── TransactionStarterApplicationTests.java # Context loading test
+            ├── controller/
+            │   └── TransactionControllerTest.java    # MockMvc REST API integration tests
+            ├── model/
+            │   └── TransactionStatusTest.java        # Unit tests for state machine transitions
+            └── service/
+                └── TransactionServiceTest.java       # Unit tests for business logic & errors
 ```
 
 ---
