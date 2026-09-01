@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toucan Customer Transactions Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0a0a;
+      --card-bg: #141414;
+      --card-border: #262626;
+      --input-bg: #000000;
+      --primary: #f97316;
+      --primary-hover: #ea580c;
+      --primary-light: #fb923c;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --info: #38bdf8;
+      --text-main: #ffffff;
+      --text-muted: #a3a3a3;
+      --radius: 12px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 24px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+      color: #000000;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 24px;
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4);
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      color: #fb923c;
+      font-weight: 500;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: rgba(249, 115, 22, 0.12);
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      color: #fb923c;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--primary);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--primary);
+    }
+
+    /* Grid Layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 992px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Card Styling */
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+    }
+
+    /* Quick Filter Chips Bar */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding: 12px;
+      background-color: #000000;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      align-items: center;
+    }
+
+    .filter-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-right: 4px;
+    }
+
+    .chip-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid #262626;
+      background: #171717;
+      color: #ffffff;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chip-btn:hover {
+      background: #262626;
+      color: #fb923c;
+      border-color: #f97316;
+    }
+
+    .chip-btn.active {
+      background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+      color: #000000;
+      border-color: #f97316;
+      font-weight: 700;
+      box-shadow: 0 2px 10px rgba(249, 115, 22, 0.4);
+    }
+
+    /* Forms & Inputs */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px 14px;
+      background-color: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 14px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.25);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+      color: #000000;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.45);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: #262626;
+      color: #ffffff;
+      border: 1px solid #404040;
+    }
+
+    .btn-secondary:hover {
+      background: #333333;
+      color: #fb923c;
+      border-color: #f97316;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+      width: auto;
+    }
+
+    /* Alerts */
+    .alert {
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-top: 14px;
+      display: none;
+      word-break: break-word;
+    }
+
+    .alert-success {
+      background-color: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+
+    .alert-error {
+      background-color: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #f87171;
+    }
+
+    .alert-info {
+      background-color: rgba(249, 115, 22, 0.15);
+      border: 1px solid rgba(249, 115, 22, 0.4);
+      color: #fb923c;
+    }
+
+    /* Table */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background-color: #000000;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--card-border);
+      color: var(--text-main);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: rgba(249, 115, 22, 0.04);
+    }
+
+    /* Status Pills */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .pill-PENDING { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .pill-PROCESSING { background: rgba(6, 182, 212, 0.18); color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.4); }
+    .pill-COMPLETED { background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .pill-FAILED { background: rgba(239, 68, 68, 0.18); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .pill-CANCELLED { background: rgba(163, 163, 163, 0.18); color: #d4d4d4; border: 1px solid rgba(163, 163, 163, 0.4); }
+
+    .pill-type {
+      background: rgba(249, 115, 22, 0.15);
+      color: #fb923c;
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      font-size: 11px;
+    }
+
+    .customer-tag {
+      background: #000000;
+      border: 1px solid #f97316;
+      color: #ffffff;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+    }
+
+    .action-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .action-select {
+      width: auto;
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+
+    .h2-link {
+      color: #fb923c;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .h2-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <div class="brand-icon">T</div>
+        <div>
+          <h1>Toucan Customer Transactions</h1>
+          <p class="brand-subtitle">Spring Boot REST API Testing Portal</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <a href="/h2-console" target="_blank" class="h2-link">🗄️ H2 Database Console</a>
+        <div class="status-badge">
+          <span class="dot"></span> API Active (:8080)
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Grid -->
+    <div class="dashboard-grid">
+      
+      <!-- Left Column: Forms & Filters -->
+      <div>
+        <!-- Create Transaction Card -->
+        <div class="card">
+          <div class="card-title">
+            <span style="color: #f97316;">➕</span> Create New Transaction
+          </div>
+          <form id="create-form">
+            <div class="form-group">
+              <label for="customerId">Customer ID *</label>
+              <input type="text" id="customerId" placeholder="e.g. CUST-102" required value="CUST-102">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="amount">Amount *</label>
+                <input type="number" id="amount" step="0.01" min="0.01" placeholder="100.00" required value="15000.00">
+              </div>
+              <div class="form-group">
+                <label for="currency">Currency *</label>
+                <select id="currency" required>
+                  <option value="USD">USD ($)</option>
+                  <option value="EUR">EUR (€)</option>
+                  <option value="GBP">GBP (£)</option>
+                  <option value="JPY">JPY (¥)</option>
+                  <option value="CAD">CAD ($)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="type">Transaction Type *</label>
+                <select id="type" required>
+                  <option value="DEPOSIT">DEPOSIT</option>
+                  <option value="PAYMENT">PAYMENT</option>
+                  <option value="REFUND">REFUND</option>
+                  <option value="TRANSFER">TRANSFER</option>
+                  <option value="WITHDRAWAL">WITHDRAWAL</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="status">Initial Status</label>
+                <select id="status">
+                  <option value="PENDING">PENDING</option>
+                  <option value="PROCESSING">PROCESSING</option>
+                  <option value="COMPLETED">COMPLETED</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="transactionId">Transaction ID (Optional)</label>
+              <input type="text" id="transactionId" placeholder="Leave blank to auto-generate">
+            </div>
+
+            <button type="submit" class="btn">Submit Transaction</button>
+          </form>
+          <div id="create-alert" class="alert"></div>
+        </div>
+
+        <!-- Lookup & Filters Card -->
+        <div class="card">
+          <div class="card-title">
+            <span style="color: #f97316;">🔍</span> Direct Lookup
+          </div>
+          <div class="form-group">
+            <label for="searchCustomer">Lookup Customer ID</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="searchCustomer" placeholder="e.g. CUST-102">
+              <button class="btn btn-secondary btn-sm" id="btn-search-customer">Search</button>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="searchTxn">Lookup Single Transaction ID</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="searchTxn" placeholder="Enter Transaction ID">
+              <button class="btn btn-secondary btn-sm" id="btn-search-txn">Fetch</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Transactions Table -->
+      <div>
+        <div class="card">
+          <div class="card-title" style="justify-content: space-between;">
+            <div>
+              <span style="color: #f97316;">📊</span> Live Transactions
+              <span id="txn-count" style="font-size: 13px; color: var(--text-muted); font-weight: normal; margin-left: 8px;">(0 loaded)</span>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btn-refresh">🔄 Refresh All</button>
+          </div>
+
+          <!-- Quick Status Filter Buttons Bar -->
+          <div class="filter-bar">
+            <span class="filter-label">Filter Status:</span>
+            <button class="chip-btn active" id="filter-ALL" onclick="setFilterStatus('ALL')">🌐 All Transactions</button>
+            <button class="chip-btn" id="filter-PENDING" onclick="setFilterStatus('PENDING')">⏳ Pending</button>
+            <button class="chip-btn" id="filter-PROCESSING" onclick="setFilterStatus('PROCESSING')">🔄 Processing</button>
+            <button class="chip-btn" id="filter-COMPLETED" onclick="setFilterStatus('COMPLETED')">✅ Completed</button>
+            <button class="chip-btn" id="filter-FAILED" onclick="setFilterStatus('FAILED')">❌ Failed</button>
+            <button class="chip-btn" id="filter-CANCELLED" onclick="setFilterStatus('CANCELLED')">🚫 Cancelled</button>
+          </div>
+
+          <div id="global-alert" class="alert" style="margin-bottom: 16px; margin-top: 0;"></div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Transaction ID</th>
+                  <th>Customer</th>
+                  <th>Amount</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Update Status</th>
+                </tr>
+              </thead>
+              <tbody id="txn-table-body">
+                <tr>
+                  <td colspan="6" class="empty-state">Loading transactions...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = '/api';
+    let currentFilterStatus = 'ALL';
+    let allLoadedTransactions = [];
+
+    // Elements
+    const createForm = document.getElementById('create-form');
+    const createAlert = document.getElementById('create-alert');
+    const globalAlert = document.getElementById('global-alert');
+    const tableBody = document.getElementById('txn-table-body');
+    const txnCount = document.getElementById('txn-count');
+
+    // On Load
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchAllTransactions();
+    });
+
+    // Filter Chip Click
+    function setFilterStatus(status) {
+      currentFilterStatus = status;
+      document.querySelectorAll('.filter-bar .chip-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`filter-${status}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      applyFilterAndRender();
+    }
+
+    // Fetch All Transactions from Server
+    async function fetchAllTransactions(customerSpecificId = null) {
+      hideAlert(globalAlert);
+      let url = `${API_BASE}/transactions`;
+      if (customerSpecificId) {
+        url = `${API_BASE}/customers/${encodeURIComponent(customerSpecificId)}/transactions`;
+      }
+
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          allLoadedTransactions = await res.json();
+          if (customerSpecificId) {
+            showAlert(globalAlert, `Showing transactions for customer: <strong>${customerSpecificId}</strong>`, 'info');
+          } else {
+            showAlert(globalAlert, `Showing <strong>ALL</strong> live transactions across all customers.`, 'info');
+          }
+          applyFilterAndRender();
+        } else {
+          allLoadedTransactions = [];
+          showAlert(globalAlert, `Failed to load transactions`, 'error');
+          applyFilterAndRender();
+        }
+      } catch (err) {
+        tableBody.innerHTML = `<tr><td colspan="6" class="empty-state">Error loading transactions: ${err.message}</td></tr>`;
+      }
+    }
+
+    // Filter local data array and render HTML
+    function applyFilterAndRender() {
+      let filtered = allLoadedTransactions;
+      if (currentFilterStatus !== 'ALL') {
+        filtered = allLoadedTransactions.filter(t => t.status === currentFilterStatus);
+      }
+
+      renderTransactions(filtered);
+    }
+
+    // Render Table
+    function renderTransactions(transactions) {
+      txnCount.textContent = `(${transactions.length} shown of ${allLoadedTransactions.length} total)`;
+
+      if (!transactions || transactions.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="6" class="empty-state">No transactions match the selected status filter (<strong>${currentFilterStatus}</strong>).</td></tr>`;
+        return;
+      }
+
+      tableBody.innerHTML = transactions.map(txn => `
+        <tr>
+          <td><strong style="font-family: monospace; font-size: 13px; color: #fb923c;">${escapeHtml(txn.transactionId)}</strong></td>
+          <td><span class="customer-tag">${escapeHtml(txn.customerId)}</span></td>
+          <td><strong>${escapeHtml(txn.currency)} ${Number(txn.amount).toFixed(2)}</strong></td>
+          <td><span class="pill pill-type">${escapeHtml(txn.type)}</span></td>
+          <td><span class="pill pill-${txn.status}">${escapeHtml(txn.status)}</span></td>
+          <td>
+            <div class="action-group">
+              <select class="action-select" id="select-status-${escapeHtml(txn.transactionId)}">
+                <option value="PROCESSING" ${txn.status === 'PROCESSING' ? 'selected' : ''}>PROCESSING</option>
+                <option value="COMPLETED" ${txn.status === 'COMPLETED' ? 'selected' : ''}>COMPLETED</option>
+                <option value="FAILED" ${txn.status === 'FAILED' ? 'selected' : ''}>FAILED</option>
+                <option value="CANCELLED" ${txn.status === 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>
+              </select>
+              <button class="btn btn-secondary btn-sm" onclick="updateStatus('${escapeHtml(txn.transactionId)}')">Update</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Create Transaction
+    createForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert(createAlert);
+
+      const custId = document.getElementById('customerId').value.trim();
+      const payload = {
+        customerId: custId,
+        amount: parseFloat(document.getElementById('amount').value),
+        currency: document.getElementById('currency').value,
+        type: document.getElementById('type').value,
+        status: document.getElementById('status').value
+      };
+
+      const customId = document.getElementById('transactionId').value.trim();
+      if (customId) {
+        payload.transactionId = customId;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/transactions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          showAlert(createAlert, `✅ Transaction created successfully for <strong>${data.customerId}</strong>!<br>ID: <strong>${data.transactionId}</strong>`, 'success');
+          document.getElementById('transactionId').value = '';
+          
+          setFilterStatus('ALL');
+          fetchAllTransactions();
+        } else {
+          let msg = data.message || 'Failed to create transaction.';
+          if (data.fieldErrors) {
+            msg += ' ' + Object.entries(data.fieldErrors).map(([k, v]) => `${k}: ${v}`).join(', ');
+          }
+          showAlert(createAlert, `❌ Error: ${msg}`, 'error');
+        }
+      } catch (err) {
+        showAlert(createAlert, `❌ Network error: ${err.message}`, 'error');
+      }
+    });
+
+    // Refresh All Button
+    document.getElementById('btn-refresh').addEventListener('click', () => {
+      setFilterStatus('ALL');
+      fetchAllTransactions();
+    });
+
+    // Search Customer
+    document.getElementById('btn-search-customer').addEventListener('click', () => {
+      const custId = document.getElementById('searchCustomer').value.trim();
+      if (custId) {
+        setFilterStatus('ALL');
+        fetchAllTransactions(custId);
+      } else {
+        setFilterStatus('ALL');
+        fetchAllTransactions();
+      }
+    });
+
+    // Search Single Transaction ID
+    document.getElementById('btn-search-txn').addEventListener('click', async () => {
+      const txnId = document.getElementById('searchTxn').value.trim();
+      if (!txnId) return;
+      hideAlert(globalAlert);
+      try {
+        const res = await fetch(`${API_BASE}/transactions/${encodeURIComponent(txnId)}`);
+        const data = await res.json();
+        if (res.ok) {
+          allLoadedTransactions = [data];
+          setFilterStatus('ALL');
+          showAlert(globalAlert, `Found transaction <strong>${txnId}</strong>`, 'info');
+        } else {
+          allLoadedTransactions = [];
+          applyFilterAndRender();
+          showAlert(globalAlert, data.message || `Transaction not found: ${txnId}`, 'error');
+        }
+      } catch (err) {
+        showAlert(globalAlert, `Error: ${err.message}`, 'error');
+      }
+    });
+
+    // Update Status Action
+    async function updateStatus(txnId) {
+      const select = document.getElementById(`select-status-${txnId}`);
+      const newStatus = select.value;
+      hideAlert(globalAlert);
+
+      try {
+        const res = await fetch(`${API_BASE}/transactions/${encodeURIComponent(txnId)}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus, reason: 'Updated via web UI' })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          showAlert(globalAlert, `✅ Status for <strong>${txnId}</strong> updated to <strong>${data.status}</strong>!`, 'success');
+          fetchAllTransactions();
+        } else {
+          showAlert(globalAlert, `❌ Cannot update ${txnId}: ${data.message}`, 'error');
+        }
+      } catch (err) {
+        showAlert(globalAlert, `❌ Error updating status: ${err.message}`, 'error');
+      }
+    }
+
+    // Helpers
+    function showAlert(element, text, type) {
+      element.className = `alert alert-${type}`;
+      element.innerHTML = text;
+      element.style.display = 'block';
+    }
+
+    function hideAlert(element) {
+      element.style.display = 'none';
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
